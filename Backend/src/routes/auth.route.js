@@ -5,7 +5,8 @@ import {
   registerSchema,
   loginSchema,
 } from "../middlewares/validateUser.js";
-import upload from "../middlewares/upload.js";
+import upload from "../utils/upload.js";
+
 const router = express.Router();
 
 router.post(

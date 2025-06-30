@@ -4,12 +4,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
-import logger from "../utils/logger.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password, gender } = req.body;
   if (!name || !email || !password || !gender) {
-    logger.warn("Missing required fields in registration");
     return res
       .status(400)
       .json({ success: false, message: "All fields are required" });
@@ -17,7 +15,6 @@ export const register = asyncHandler(async (req, res) => {
 
   const alreadyExists = await User.findOne({ $or: [{ name }, { email }] });
   if (alreadyExists) {
-    logger.warn(`User already exists: ${email}`);
     return res
       .status(400)
       .json({ success: false, message: "User already exists" });
@@ -32,13 +29,11 @@ export const register = asyncHandler(async (req, res) => {
       );
       profilePicUrl = result.secure_url;
     } catch (err) {
-      logger.error(`Cloudinary upload failed: ${err.message}`);
       return res
         .status(500)
         .json({ success: false, message: "Profile picture upload failed" });
     }
   } else {
-    logger.warn("No profile picture uploaded");
     return res
       .status(400)
       .json({ success: false, message: "Profile picture is required" });
@@ -62,7 +57,6 @@ export const register = asyncHandler(async (req, res) => {
     expiresIn: config.EXPIRE,
   });
   res.cookie("token", token, config.COOKIE_OPTIONS);
-  logger.info(`User registered: ${email}`);
   res.status(201).json({
     success: true,
     data: { user: userObj, token },
@@ -73,7 +67,6 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    logger.warn("Missing email or password in login");
     return res
       .status(400)
       .json({ success: false, message: "All fields are required" });
@@ -81,7 +74,6 @@ export const login = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    logger.warn(`Login failed, user not found: ${email}`);
     return res
       .status(400)
       .json({ success: false, message: "Invalid Credentials" });
@@ -89,7 +81,6 @@ export const login = asyncHandler(async (req, res) => {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    logger.warn(`Login failed, wrong password: ${email}`);
     return res
       .status(400)
       .json({ success: false, message: "Invalid Credentials" });
@@ -101,7 +92,6 @@ export const login = asyncHandler(async (req, res) => {
   res.cookie("token", token, config.COOKIE_OPTIONS);
   const userObj = user.toObject();
   delete userObj.password;
-  logger.info(`User logged in: ${email}`);
   res.status(200).json({
     success: true,
     data: { user: userObj, token },
@@ -111,6 +101,5 @@ export const login = asyncHandler(async (req, res) => {
 
 export const logout = asyncHandler(async (req, res) => {
   res.clearCookie("token", config.COOKIE_OPTIONS);
-  logger.info("User logged out");
   res.status(200).json({ success: true, message: "Logged out successfully" });
 });

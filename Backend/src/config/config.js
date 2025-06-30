@@ -1,7 +1,15 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const requiredVars = ["PORT", "MONGODB_URI", "SECRET", "EXPIRE"];
+const requiredVars = [
+  "PORT",
+  "MONGODB_URI",
+  "SECRET",
+  "EXPIRE",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+  "CLOUDINARY_API_SECRET",
+];
 requiredVars.forEach((key) => {
   if (!process.env[key]) {
     throw new Error(`Missing required environment variable: ${key}`);

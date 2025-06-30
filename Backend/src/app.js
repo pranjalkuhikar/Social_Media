@@ -4,6 +4,7 @@ import indexRoutes from "./routes/index.route.js";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
+import morgan from "morgan";
 
 const app = express();
 dotenv.config();
@@ -12,6 +13,7 @@ app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
 app.use(helmet());
+app.use(morgan("dev"));
 app.use(cors("*"));
 // app.use(
 //   cors({

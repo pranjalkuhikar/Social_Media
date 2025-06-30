@@ -6,7 +6,6 @@ export const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   gender: z.enum(["male", "female", "other"]),
-  profilePic: z.string().url("Profile picture must be a valid URL"),
 });
 
 export const loginSchema = z.object({

@@ -13,6 +13,9 @@ const _config = {
   MONGODB_URI: process.env.MONGODB_URI,
   SECRET: process.env.SECRET,
   EXPIRE: process.env.EXPIRE,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   JSON_LIMIT: "30mb",
   COOKIE_OPTIONS: {
     httpOnly: true,
